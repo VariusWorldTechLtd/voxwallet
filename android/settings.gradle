@@ -1,0 +1,3 @@
+rootProject.name = 'voxwallet'
+
+include ':app'
