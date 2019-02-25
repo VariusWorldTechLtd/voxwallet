@@ -1,15 +1,22 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, Text, TouchableHighlight } from 'react-native';
 import t from 'tcomb-form-native';
-import { validate } from 'tcomb-validation';
+import firebase from 'firebase';
+
 
 const Form = t.form.Form;
+
+var Gender = t.enums({
+  Male: 'Male',
+  Female: 'Female'
+});
 
 const User = t.struct({
   email: t.String,
   name: t.String,
-  age: t.Number,
-  username: t.String,
+  surname: t.String,
+  gender: Gender,
+  birthDate: t.Date,
   password: t.String,
   terms: t.Boolean
 });
@@ -26,39 +33,50 @@ const options = {
       label: 'Agree to Terms',
       error: 'Agree to Terms'
     },
-    age: {
-      error: 'Age is required'
-    },
     name: {
-      label: 'Full name',
+      label: 'First name',
       error: 'Full name is required'
     },
+    surname: {
+      label: 'Surname',
+      error: 'Surname is required'
+    },
+    birthDate: {
+      mode: 'date'
+    }
   },
   stylesheet: formStyles,
 };
 
 export default class App extends Component {
+
+  state = { error : ''};
   
-  handleSubmit = () => {
+  handleSignUp  = () => {
+    this.setState({error: ''});
     const value = this._form.getValue();
     console.log('value: ', value);
+    const {email, password} = value;
+    firebase.auth().createUserWithEmailAndPassword(email, password)
+    .then(response => {
+      // this.props.navigation.navigate("Home");
+      console.log('response: ', response);
+    })
+    .catch(err => {
+      console.log('error: ', err);
+      this.setState({error: 'Authentication failed'});
+    })    
   }
   render() {
     return (
       <View style={styles.container}>
+      <Text style={formStyles.error}>{this.state.error}</Text>
         <Form 
           ref={c => this._form = c}
           type={User} 
           options={options}
-          // value={this.state.value}
-          // onChange={this.onChange}
         />
-        {/* <Button
-          style={styles.button}
-          title="Sign Up!"
-          onPress={this.handleSubmit}
-        /> */}
-        <TouchableHighlight style={styles.button} onPress={this.handleSignUp} underlayColor='#99d9f4' onPress={this.handleSubmit}>
+        <TouchableHighlight style={styles.button} onPress={this.handleSignUp.bind(this)} underlayColor='#99d9f4'>
           <Text style={styles.buttonText}>Sign Up</Text>
         </TouchableHighlight>
       </View>

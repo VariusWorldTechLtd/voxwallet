@@ -1,33 +1,27 @@
 
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
-import AppNavigator from './src/AppNavigator';  
-
-
+import AppNavigator from './src/AppNavigator';
+import firebase from 'firebase';
+import {API_KEY, AUTH_DOMAIN, DATABASE_URL,
+  PROJECT_ID, STORAGE_BUCKET, MESSAGING_SENDER_ID} from './constants';
 
 export default class App extends Component {
+  componentWillMount() {
+    console.log("i did enter:", API_KEY);
+
+    firebase.initializeApp({
+      apiKey: API_KEY,
+      authDomain: AUTH_DOMAIN,
+      databaseURL: DATABASE_URL,
+      projectId: PROJECT_ID,
+      storageBucket: STORAGE_BUCKET,
+      messagingSenderId: MESSAGING_SENDER_ID
+    });
+  }
+
   render() {
     return (
-        <AppNavigator/>
+      <AppNavigator/>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-});

@@ -1,3 +1,6 @@
+.env
+constants.js
+
 # OSX
 #
 .DS_Store

@@ -2,11 +2,19 @@
 import React, {Component} from 'react';
 import {StyleSheet, View, Button} from 'react-native';
 
-export default class App extends Component {
+export default class Welcome extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text>This is Home page</Text>
+        <Button
+         title="Sign Up"
+         onPress={() => this.props.navigation.navigate("Signup")}
+       />
+       <Button
+         title="Login"
+         onPress={() => this.props.navigation.navigate("Login")}
+       />
+
       </View>
     );
   }

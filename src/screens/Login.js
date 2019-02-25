@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, Text, TouchableHighlight } from 'react-native';
 import t from 'tcomb-form-native';
-import { validate } from 'tcomb-validation';
+import firebase from 'firebase';
 
 const Form = t.form.Form;
 
 const User = t.struct({
   email: t.String,
-  username: t.String,
   password: t.String,
 });
 
@@ -25,27 +24,29 @@ const options = {
 
 export default class App extends Component {
   
-  handleSubmit = () => {
+    state = { error : ''};
+
+  handleLogin = () => {
+    this.setState({error: ''});
     const value = this._form.getValue();
     console.log('value: ', value);
+    const {email, password} = value;
+    firebase.auth().signInWithEmailAndPassword(email, password)
+    .catch(() => {
+        this.setState({error: 'Authentication failed'});
+    })
   }
   render() {
     return (
       <View style={styles.container}>
+      <Text style={formStyles.error}>{this.state.error}</Text>
         <Form 
           ref={c => this._form = c}
           type={User} 
           options={options}
-          // value={this.state.value}
-          // onChange={this.onChange}
         />
-        {/* <Button
-          style={styles.button}
-          title="Sign Up!"
-          onPress={this.handleSubmit}
-        /> */}
-        <TouchableHighlight style={styles.button} onPress={this.handleSignUp} underlayColor='#99d9f4' onPress={this.handleSubmit}>
-          <Text style={styles.buttonText}>Sign Up</Text>
+        <TouchableHighlight style={styles.button} underlayColor='#99d9f4' onPress={this.handleLogin.bind(this)}>
+          <Text style={styles.buttonText}>Login</Text>
         </TouchableHighlight>
       </View>
     );
