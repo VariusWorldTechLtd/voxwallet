@@ -56,11 +56,33 @@ export default class App extends Component {
     this.setState({error: ''});
     const value = this._form.getValue();
     console.log('value: ', value);
-    const {email, password} = value;
+    const {
+      email, 
+      name, 
+      surname, 
+      gender, 
+      birthDate,
+      password,
+      terms
+    } = value;
+
+    const userBirthDate = new Date(birthDate).getTime();
+    console.log("userTimeStampBirthDate", userBirthDate);
     firebase.auth().createUserWithEmailAndPassword(email, password)
     .then(response => {
-      // this.props.navigation.navigate("Home");
       console.log('response: ', response);
+      const {currentUser} = firebase.auth();
+      firebase.database().ref(`/users/${currentUser.uid}/userDetails`)
+      .push({
+        email,
+        name,
+        surname,
+        gender,
+        birthDate: userBirthDate,
+        password,
+        terms
+      })
+      this.props.navigation.navigate("Home");
     })
     .catch(err => {
       console.log('error: ', err);

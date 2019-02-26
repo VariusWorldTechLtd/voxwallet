@@ -7,8 +7,6 @@ import {API_KEY, AUTH_DOMAIN, DATABASE_URL,
 
 export default class App extends Component {
   componentWillMount() {
-    console.log("i did enter:", API_KEY);
-
     firebase.initializeApp({
       apiKey: API_KEY,
       authDomain: AUTH_DOMAIN,

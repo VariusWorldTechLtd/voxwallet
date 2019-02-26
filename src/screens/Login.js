@@ -32,6 +32,9 @@ export default class App extends Component {
     console.log('value: ', value);
     const {email, password} = value;
     firebase.auth().signInWithEmailAndPassword(email, password)
+    .then(() => {
+      this.props.navigation.navigate("Home");
+    })
     .catch(() => {
         this.setState({error: 'Authentication failed'});
     })

@@ -6,7 +6,7 @@ export default class App extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text>This is Home page</Text>
+        <Text>This is Tab3</Text>
       </View>
     );
   }
